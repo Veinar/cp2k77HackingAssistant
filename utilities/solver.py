@@ -1,5 +1,4 @@
 import itertools
-from utilities.buffer import Buffer
 
 def solve(picked_sequences):
     # TODO: Create solving function
@@ -17,10 +16,12 @@ def solve(picked_sequences):
         if column_blocked:
             pass
 
-def check_possible_sequences(sequences, buffer_size):
+def check_sequences_in_combinations(sequences, combinations, buffer_size):
 
-    # Generate possible combination of unique elements with length of buffer size
-    combinations = generate_combinations(sequences, buffer_size)
+    # Check if there are multiple sequences or only one
+    # If one return sequence from args - no need to be analyzed anymore
+    if not isinstance(sequences[0], list):
+        return ['True']
 
     # Projection of all combinations to String type
     combi_as_str = list()
@@ -50,8 +51,6 @@ def check_possible_sequences(sequences, buffer_size):
                 has_every.append('True')
             else:
                 has_every.append('False')
-        print(has_every)
-        print(combi_as_str[i])
         possible.append(has_every)
 
     return possible
@@ -83,8 +82,8 @@ def permute_sequences(sequences, buffer_size):
 
     #If buffer is too small to handle every sequence combined
     length_of_combination = 0
-    for x in sequences:
-        length_of_combination += len(x)
+    for i in sequences:
+        length_of_combination += len(i)
     if length_of_combination > buffer_size:
         return None
 
@@ -128,3 +127,20 @@ def generate_combinations(sequences, buffer_size):
     combinations = list(itertools.product(elements, repeat=buffer_size))
 
     return combinations
+
+def get_best_combination(combinations, possible_combinations):
+
+    all_sequences_in_combination = ['True']*len(possible_combinations[0])
+    best = None
+    found = False
+
+    for row in possible_combinations:
+        if row == all_sequences_in_combination:
+            best = possible_combinations.index(row)
+            found = True
+            break
+
+    if found:
+        return combinations[best]
+    else:
+        return None
