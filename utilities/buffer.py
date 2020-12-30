@@ -5,8 +5,11 @@ class Buffer:
 
     def push(self, element):
         # Add element at zero position and remove last element (maintain fixed size)
-        self.buffer.insert(0,element)
-        self.buffer = self.buffer[:-1]
+        if None in self.buffer:
+            self.buffer.insert(0,element)
+            self.buffer = self.buffer[:-1]
+        else:
+            pass
 
     def print_buffer(self):
         print(self.buffer)
