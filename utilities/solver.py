@@ -1,6 +1,6 @@
 import itertools
 
-def solve(picked_sequences):
+def solve(codematrix, picked_sequences):
     # TODO: Create solving function
     row_blocked = True
     row_blocked_num = 0
@@ -130,10 +130,13 @@ def generate_combinations(sequences, buffer_size):
 
 def get_best_combination(combinations, possible_combinations):
 
+    # Create best what row in possible combinations could be
+    # will be used for searching possible_combinations list
     all_sequences_in_combination = ['True']*len(possible_combinations[0])
     best = None
     found = False
 
+    # Find row where all sequences are present - filled all with True
     for row in possible_combinations:
         if row == all_sequences_in_combination:
             best = possible_combinations.index(row)
@@ -142,5 +145,40 @@ def get_best_combination(combinations, possible_combinations):
 
     if found:
         return combinations[best]
+    else:
+        return None
+
+def get_required_combination(combinations, possible_combinations, required_sequences):
+    # This should be used when all sequences cannot be done
+
+    # Check if sequence number is not exceeeding allowed values
+    biggest_possible = len(possible_combinations[0]) - 1
+    for i in required_sequences:
+        if i > biggest_possible:
+            # TODO: handle this in future
+            print("Exceeded maximum index allowed. TIP: Count from 0 like programmers do!")
+            return None
+
+    row_to_lookup = list()
+    # Generate row to be found in possible combinations list
+    for i in range(0,len(possible_combinations[0])):
+        if i in required_sequences:
+            row_to_lookup.append('True')
+        else:
+            row_to_lookup.append('False')
+
+    selected_combination = None
+    found = False
+
+    # Find row where required sequences are present
+    for row in possible_combinations:
+        if row == row_to_lookup:
+            selected_combination = possible_combinations.index(row)
+            found = True
+            break
+
+    if found:
+        print(combinations[selected_combination])
+        return combinations[selected_combination]
     else:
         return None
