@@ -124,7 +124,15 @@ def generate_combinations(sequences, buffer_size):
                 elements.append(str(sequences[i][j]))
 
     # Generate combinations of unique elements (blocks) from sequences
-    combinations = list(itertools.product(elements, repeat=buffer_size))
+    # Combinatios could be shorter than whole buffer :)
+    #combinations = list(itertools.product(elements, repeat=buffer_size))
+
+    # New approach, generate all combinations from-to length:
+    # minimum - shortest sequence
+    # maximum - buffer size (buffer_size length also, so +1)
+    combinations = list()                       
+    for k in range(get_shortest_sublist_length(sequences), buffer_size + 1):
+        combinations.extend(list(itertools.product(elements, repeat=k)))
 
     return combinations
 
@@ -178,7 +186,14 @@ def get_required_combination(combinations, possible_combinations, required_seque
             break
 
     if found:
-        print(combinations[selected_combination])
         return combinations[selected_combination]
     else:
         return None
+
+def get_shortest_sublist_length(some_list):
+    shortest = len(some_list[0])
+    for i in some_list:
+        if len(i) < shortest:
+            shortest = len(i)
+
+    return shortest
