@@ -130,7 +130,7 @@ def generate_combinations(sequences, buffer_size):
     # New approach, generate all combinations from-to length:
     # minimum - shortest sequence
     # maximum - buffer size (buffer_size length also, so +1)
-    combinations = list()                       
+    combinations = list()                   
     for k in range(get_shortest_sublist_length(sequences), buffer_size + 1):
         combinations.extend(list(itertools.product(elements, repeat=k)))
 
@@ -140,19 +140,24 @@ def get_best_combination(combinations, possible_combinations):
 
     # Create best what row in possible combinations could be
     # will be used for searching possible_combinations list
-    all_sequences_in_combination = ['True']*len(possible_combinations[0])
-    best = None
-    found = False
+    row_to_lookup = ['True']*len(possible_combinations[0])
 
-    # Find row where all sequences are present - filled all with True
-    for row in possible_combinations:
-        if row == all_sequences_in_combination:
-            best = possible_combinations.index(row)
+    # Find row/s where required sequences are present
+    # and get its index
+    findings = list()
+    found = False
+    for i in range(0, len(possible_combinations)):
+        if possible_combinations[i] == row_to_lookup:
+            findings.append(i)
             found = True
-            break
 
     if found:
-        return combinations[best]
+        #return combinations[best]
+        combinations_to_return = list()
+        # Get combinations from index value and put them into list
+        for i in range(0, len(findings)):
+            combinations_to_return.append(combinations[findings[i]])
+        return combinations_to_return
     else:
         return None
 
@@ -175,18 +180,21 @@ def get_required_combination(combinations, possible_combinations, required_seque
         else:
             row_to_lookup.append('False')
 
-    selected_combination = None
+    # Find row/s where required sequences are present
+    # and get its index
+    findings = list()
     found = False
-
-    # Find row where required sequences are present
-    for row in possible_combinations:
-        if row == row_to_lookup:
-            selected_combination = possible_combinations.index(row)
+    for i in range(0, len(possible_combinations)):
+        if possible_combinations[i] == row_to_lookup:
+            findings.append(i)
             found = True
-            break
 
     if found:
-        return combinations[selected_combination]
+        combinations_to_return = list()
+        # Get combinations from index value and put them into list
+        for i in range(0, len(findings)):
+            combinations_to_return.append(combinations[findings[i]])
+        return combinations_to_return
     else:
         return None
 
