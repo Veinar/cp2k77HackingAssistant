@@ -16,4 +16,6 @@ class CodeMatrix:
 
     def fill_matrix(self, input_matrix):
         self.matrix = input_matrix
-    
+
+    def get_matrix(self):
+        return self.matrix

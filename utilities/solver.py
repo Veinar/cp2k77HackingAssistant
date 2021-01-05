@@ -1,20 +1,10 @@
 import itertools
+import copy
+from utilities.node import Node
 
 def solve(codematrix, picked_sequences):
     # TODO: Create solving function
-    row_blocked = True
-    row_blocked_num = 0
-    column_blocked = False
-    column_blocked_num = 0
-    solved = False
-
-    while not solved:
-        # We are picking in column
-        if row_blocked:
-            pass
-        # We are picking in row
-        if column_blocked:
-            pass
+    pass
 
 def check_sequences_in_combinations(sequences, combinations, buffer_size):
 
@@ -205,3 +195,63 @@ def get_shortest_sublist_length(some_list):
             shortest = len(i)
 
     return shortest
+
+def traverse_matrix(matrix, buffer_size):
+    # Get possible paths from codematrix with max lenght of buffer size
+
+    # Initialize nodes for first run
+    nodes = list()
+    for i in range(0, len(matrix[0])):
+        matrix_copy = mark_visited(matrix, [(0,i)])
+        nodes.append(Node((0,i),matrix_copy))
+
+    # Start from picking vertically
+    direction = True
+    for i in range(0, buffer_size - 1):
+        new_nodes = list()
+        for j in range(0,len(nodes)):
+            # Get possible places for next move
+            avaliable = get_possible_movement(nodes[j].get_state(), nodes[j].get_position(), direction)
+            for k in avaliable:
+                # Get path that leads to this node
+                current_path = nodes[j].get_path()
+                # Get new state matrix
+                new_matrix = mark_visited(matrix, current_path)
+                new_matrix = mark_visited(new_matrix, [(k[0], k[1])])
+                new_node = Node(k, new_matrix, current_path=current_path)
+                new_nodes.append(new_node)
+        # For next loop evaluate new cases (nodes)
+        nodes = new_nodes
+        # Switch directions
+        direction = not direction
+
+    return nodes
+
+def get_possible_movement(matrix, position, direction):
+
+    position_row = position[0]
+    position_col = position[1]
+    possible_movement = list()
+
+    if direction:
+        # Vertical - PION
+        for i in range(0, len(matrix)):
+            if "X" not in str(matrix[i][position_col]):
+                possible_movement.append((i, position_col))
+
+    else:
+        # Horizontal - POZIOM
+        for i in range(0, len(matrix[0])):
+            if "X" not in str(matrix[position_row][i]):
+                possible_movement.append((position_row, i))
+
+    return possible_movement
+
+def mark_visited(matrix, places):
+
+    new_matrix = copy.deepcopy(matrix)
+
+    for i in places:
+        new_matrix[i[0]][i[1]] = "X"
+
+    return new_matrix
