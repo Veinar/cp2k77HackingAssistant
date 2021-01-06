@@ -220,12 +220,21 @@ def traverse_matrix(matrix, buffer_size):
                 new_matrix = mark_visited(new_matrix, [(k[0], k[1])])
                 new_node = Node(k, new_matrix, current_path=current_path)
                 new_nodes.append(new_node)
+        # Free some memory (8x8 matrix and size 8 buffer is memory killer)
+        del nodes
         # For next loop evaluate new cases (nodes)
         nodes = new_nodes
         # Switch directions
         direction = not direction
 
-    return nodes
+    # Rewrite paths to list and
+    # remove nodes (no more needed)
+    paths = list()
+    for node in nodes:
+        paths.append(node.get_path())
+        del node
+
+    return paths
 
 def get_possible_movement(matrix, position, direction):
 
