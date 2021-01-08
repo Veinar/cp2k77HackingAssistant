@@ -6,9 +6,9 @@ def solve():
     pass
 
 def check_sequences_in_combinations(sequences, combinations, buffer_size):
-
     # Check if there are multiple sequences or only one
     # If one return sequence from args - no need to be analyzed anymore
+    
     if not isinstance(sequences[0], list):
         return ['True']
 
@@ -95,13 +95,18 @@ def permute_sequences(sequences, buffer_size):
     return combinations
 
 def generate_combinations(sequences, buffer_size):
+    # Generate all possible combinations of unique elements from sequences
+    # Generate those sequences in length from shortest sequence to buffer size.
 
+    # Check if sequences placed in order as combination
+    # are shorter than buffer size.
     in_order_length = 0
     for i in range(0, len(sequences)):
         in_order_length += len(sequences[i])
 
     if in_order_length == buffer_size:
         print('\x1b[6;30;42m' + "Do not need to generate combinations" + '\x1b[0m')
+        # TODO: Maybe handle this somehow?
 
     # This variable will hold unique elements
     elements = list()
@@ -126,9 +131,9 @@ def generate_combinations(sequences, buffer_size):
     return combinations
 
 def get_best_combination(combinations, possible_combinations):
-
     # Create best what row in possible combinations could be
     # will be used for searching possible_combinations list
+
     row_to_lookup = ['True']*len(possible_combinations[0])
 
     # Find row/s where required sequences are present
@@ -236,19 +241,21 @@ def traverse_matrix(matrix, buffer_size):
     return paths
 
 def get_possible_movement(matrix, position, direction):
+    # Get possible movent from current location on matrix
+    # consider already visited points as not able to be in path
 
     position_row = position[0]
     position_col = position[1]
     possible_movement = list()
 
     if direction:
-        # Vertical - PION
+        # Vertical
         for i in range(0, len(matrix)):
             if "X" not in str(matrix[i][position_col]):
                 possible_movement.append((i, position_col))
 
     else:
-        # Horizontal - POZIOM
+        # Horizontal
         for i in range(0, len(matrix[0])):
             if "X" not in str(matrix[position_row][i]):
                 possible_movement.append((position_row, i))
@@ -256,6 +263,8 @@ def get_possible_movement(matrix, position, direction):
     return possible_movement
 
 def mark_visited(matrix, places):
+    # Mark visited places in matrix, usable during traversing
+    # Using deepclone to create unique matrix for every Node
 
     new_matrix = copy.deepcopy(matrix)
 
@@ -274,6 +283,7 @@ def elements_in_path(matrix, path):
 
 def compare_paths_and_combinations(matrix, paths, picked_sequences, only_one=True):
     # Find combinations in paths, and return one or every that was found
+
     elem_in_path = list()
     for path in paths:
         elem_in_path.append(elements_in_path(matrix, path))
