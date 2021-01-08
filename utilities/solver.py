@@ -2,8 +2,7 @@ import itertools
 import copy
 from utilities.node import Node
 
-def solve(codematrix, picked_sequences):
-    # TODO: Create solving function
+def solve():
     pass
 
 def check_sequences_in_combinations(sequences, combinations, buffer_size):
@@ -102,7 +101,7 @@ def generate_combinations(sequences, buffer_size):
         in_order_length += len(sequences[i])
 
     if in_order_length == buffer_size:
-        print("Do not need to generate combinations")
+        print('\x1b[6;30;42m' + "Do not need to generate combinations" + '\x1b[0m')
 
     # This variable will hold unique elements
     elements = list()
@@ -264,3 +263,48 @@ def mark_visited(matrix, places):
         new_matrix[i[0]][i[1]] = "X"
 
     return new_matrix
+
+def elements_in_path(matrix, path):
+    # Switch indexes in pathlist to elements in matrix
+    # will be used for comparing combinations and elements in path
+    elements = list()
+    for coords in path:
+        elements.append(matrix[coords[0]][coords[1]])
+    return elements
+
+def compare_paths_and_combinations(matrix, paths, picked_sequences, only_one=True):
+    # Find combinations in paths, and return one or every that was found
+    elem_in_path = list()
+    for path in paths:
+        elem_in_path.append(elements_in_path(matrix, path))
+
+    # If not only one, init list
+    if only_one:
+        selected_path = None
+    else:
+        selected_path = list()
+
+    found = False
+    for i in range(0, len(picked_sequences)):
+        for j in range(0, len(elem_in_path)):
+            # Comparision on strings :)
+            combi = ''.join(picked_sequences[i])
+            path = ''.join(elem_in_path[j])
+            if combi in path:
+                #print("Found path:")
+                #print("-----------")
+                #print("Combination:")
+                #print(picked_sequences[i])
+                #print("Path:")
+                #print(paths[j])
+                #print("-------------------------")
+                found = True
+                if only_one:
+                    selected_path = paths[j]
+                    break
+                else:
+                    selected_path.append(paths[j])
+        if only_one and found:
+            break
+    # If path is found return it, else return None
+    return selected_path
