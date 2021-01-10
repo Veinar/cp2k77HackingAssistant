@@ -48,7 +48,7 @@ Algorithm to solve this riddle has basically three steps:
 
 :speech_balloon: **This is covered by functions:** *traverse_matrix()*
 
-4. Check if solution (from step 2) is covered in any path, and return every or only one solution or every.
+4. Check if solution (from step 2) is covered in any path, and return every or only one solution.
 
 :speech_balloon: **This is covered by functions:** *compare_paths_and_combinations()*
 
@@ -64,6 +64,7 @@ Automatic unit tests will be implemented in future :bell:
 ## Usage
 
 Coming soon...
+For now see: script.py (in root dir)
 
 ### **Applies to larger matrix and buffer:**
 *In "miscellaneous" directory there are pregenerated traverse paths (paths.7z) for larger matrix and buffer. Use them rather than generate every run - it's easier to read file than generate paths. Use 7zip (or simillar tool) to decompress.* :v:
